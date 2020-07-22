@@ -1,6 +1,4 @@
 <template>
-<!-- https://vuetifyjs.com/ko/components/grids/, row = 행, col = 열
-     https://github.com/shershen08/vue-masonry#readme, 반복되는 요소의 부모 요소에 v-masonry, item-selector=".item" 작성, 반복되는 요소에 v-masonry-tile, class="item" 작성 -->
     <v-row
         v-masonry
         item-selector=".item">
