@@ -1,48 +1,33 @@
 import axios from 'axios'
 
-// movie.js는 저장소의 일종의 모듈이다. 따라서 index.js에서 import해서 사용해야한다.
 export default {
-    namespaced: true, // 이 부분을 작성해줘야 SearchBar.vue에서 movie라는 namespace로 접근할 수 있다.
-    // state 빼고 복수, state는 일종의 데이터이다. => arrow function 사용.
+    namespaced: true,
     state: () => ({
         title: '',
         movies: [],
         loading: false
     }),
     getters: {},
-    // 비동기처리 가능하지 않다.
     mutations: {
-        // 범용적으로 사용하는 mutation
         updateState (state, payload) {
-            // payload는 객체 데이터이고 객체 데이터의 key 값(property)을 문자로 만들 수 있는 구조로 만든다.
             Object.keys(payload).forEach(key => {
-                state[key] = payload[key] // (좌)sate에 있는 loading = (우) payload에 있는 loading
+                state[key] = payload[key]
             })
         },
-        // 하지만 추가적으로 가져오는 값들도 할당해서 뒷 쪽으로 밀어 넣어줘야하는데 
-        // updateSate mutation은 assign하는 코드이므로 updateState를 쓸 수 없다. 따라서 추가적인 mutations 작성한다.
         pushIntoMovies (state, movies) {
-            state.movies.push(...movies) //item 단위로 끊어져서 들어갈 수 있도록 전개연산자를 사용해준다.
+            state.movies.push(...movies)
         }
     },
-    // 비동기처리 가능하다.
     actions: {
-        /*  fetchMovies ({ state, commit }, pageNum) {
-                return new Promise(async resolve => {
-                    const res = await axios.get(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${state.title}&page=${pageNum}`)
-                    commit('pushIntoMovies', res.data.Search)
-                    resolve(res.data)
-                })
-            }  */
         async fetchMovies ({ state, commit }, pageNum) {
             const res = await axios.get(`http://www.omdbapi.com/?apikey=39ea34de&s=${state.title}&page=${pageNum}`)
             commit('pushIntoMovies', res.data.Search)
-            return res.data //resolve라는 함수에 인수로 데이터를 넣으면 밖에서 반환 받아서 사용할 수 있다.
+            return res.data
         },
-        async searchMovies ({ commit, dispatch }) { //commit을 사용하기 위해서 2번째 인수로 받는다.
-            commit('updateState', { //mutation을 이용해 state의 loading 부분에 true 값 할당시킨다. 
+        async searchMovies ({ commit, dispatch }) {
+            commit('updateState', { 
                 loading: true, // 로딩 애니메이션 시작
-                movies: [] //searchMovies를 두번 실행하게 되면 기존 배열에 있는 데이터 뒤에 중복적으로 데이터를 밀어넣게 되므로 "초기화 해주는 코드"를 작성해준다.
+                movies: [] // 초기화
             })
 
             const { totalResults } = await dispatch('fetchMovies', 1)
@@ -50,7 +35,7 @@ export default {
 
             if (pageLength > 1) {
                 for(let i=2; i<=pageLength; i++) {
-                    if (i > 4) break // 최대 40개까지만 받을 수 있게
+                    if (i > 4) break
                     await dispatch('fetchMovies', i)
                 }
             }
