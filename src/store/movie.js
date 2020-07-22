@@ -20,7 +20,7 @@ export default {
     },
     actions: {
         async fetchMovies ({ state, commit }, pageNum) {
-            const res = await axios.get(`http://www.omdbapi.com/?apikey=39ea34de&s=${state.title}&page=${pageNum}`)
+            const res = await axios.get(`https://www.omdbapi.com/?apikey=39ea34de&s=${state.title}&page=${pageNum}`)
             commit('pushIntoMovies', res.data.Search)
             return res.data
         },

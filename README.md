@@ -3,17 +3,17 @@
 - 단위 테스트(Unit test) 버전이 추가되었습니다.
   - `unit-test` Branch에서 확인할 수 있습니다.
 - 같은 테스트 환경을 위해 Vue CLI를 `4.1.2` 버전으로 설치하도록 문서를 수정했습니다.
-- 모든 모듈의 버전은 [Package.json](https://github.com/HeropCode/Vue-Movie-app/blob/master/package.json) 파일을 참고해주세요.
+- 모든 모듈의 버전은 [Package.json](https://github.com/parkyuseok/Vue-Movie-app/blob/master/package.json) 파일을 참고해주세요.
 - 강의 영상의 NodeJS 버전은 `10.15.0`이며, 그 이상의 LTS 버전(짝수 버전)을 사용하시길 권장합니다.
 - 강의 영상의 NPM 버전은 `6.5.0`이며, 역시 그 이상의 버전을 사용하시길 권장합니다.
-- 버그 및 수정/건의 사항 등은 [Issues](https://github.com/HeropCode/Vue-Movie-app/issues) 혹은 thesecon@gmail.com으로 문의 부탁드립니다.
+- 버그 및 수정/건의 사항 등은 [Issues](https://github.com/parkyuseok/Vue-Movie-app/issues) 혹은 thesecon@gmail.com으로 문의 부탁드립니다.
 
-[Todo App](https://github.com/HeropCode/Vue-Todo-app) 예제를 통해 Vue CLI 없이 개발 환경을 구성했다면,<br>
+[Todo App](https://github.com/parkyuseok/Vue-Todo-app) 예제를 통해 Vue CLI 없이 개발 환경을 구성했다면,<br>
 이번에는 [Vue CLI](https://cli.vuejs.org/)를 사용해 손쉽고 빠르게 개발 환경을 구성합니다.<br>
 
 Movie API를 사용해 <strong>영화 검색 페이지</strong>를 만듭니다.
 
-[DEMO](https://vue-movie-app-for-fastcampus.web.app/)
+[DEMO](https://vue-movie-app-93d9b.web.app/)
 
 ## Vue CLI
 
