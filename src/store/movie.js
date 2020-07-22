@@ -6,6 +6,14 @@ export default {
         loading: false
     }),
     getters: {},
+    // 비동기처리 가능하지 않다.
     mutations: {},
-    actions: {}
+    // 비동기처리 가능하다.
+    actions: {
+        async searchMovies ({ state }) { // context에 있는 state를 바로 할당.
+            state.loading = true // actions에서 데이터를 바로 할당하면 안된다. (mutations의 도움을 받아야함.)
+            const res = await axios.get(`http://www.omdbapi.com/?apikey=39ea34de&s=${state.title}`)
+            state.loading = false
+        }
+    }
 }
