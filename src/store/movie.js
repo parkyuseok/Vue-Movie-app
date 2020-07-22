@@ -18,6 +18,11 @@ export default {
             Object.keys(payload).forEach(key => {
                 state[key] = payload[key] // (좌)sate에 있는 loading = (우) payload에 있는 loading
             })
+        },
+        // 하지만 추가적으로 가져오는 값들도 할당해서 뒷 쪽으로 밀어 넣어줘야하는데 
+        // updateSate mutation은 assign하는 코드이므로 updateState를 쓸 수 없다. 따라서 추가적인 mutations 작성한다.
+        pushIntoMovies (state, movies) {
+            state.movies.push(...movies) //item 단위로 끊어져서 들어갈 수 있도록 전개연산자를 사용해준다.
         }
     },
     // 비동기처리 가능하다.
@@ -27,10 +32,23 @@ export default {
             commit('updateState', { //mutation을 이용해 state의 loading 부분에 true 값 할당시킨다. 
                 loading: true
             })
-            const res = await axios.get(`http://www.omdbapi.com/?apikey=39ea34de&s=${state.title}`)
+            const res = await axios.get(`http://www.omdbapi.com/?apikey=39ea34de&s=${state.title}&page=1`)
+            const pageLength = Math.ceil(res.data.totalResults / 10)
+
+            // 첫번째 페이지는 그냥 바로 할당해주어도 괜찮다.
+            commit('updateState', {
+                movies: res.data.Search
+            })
+
+            if (pageLength > 1) {
+                for(let i=2; i<=pageLength; i++) {
+                    if (i > 4) break // 최대 40개까지만 받을 수 있게
+                    const resMore = await axios.get(`http://www.omdbapi.com/?apikey=39ea34de&s=${state.title}&page=${i}`)
+                    commit('pushIntoMovies', resMore.data.Search)
+                }
+            }
 
             commit('updateState', {
-                movies: res.data.Search,
                 loading: false
             })
         }
