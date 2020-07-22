@@ -1,9 +1,13 @@
+import axios from 'axios'
+
 // movie.js는 저장소의 일종의 모듈이다. 따라서 index.js에서 import해서 사용해야한다.
 export default {
+    namespaced: true, // 이 부분을 작성해줘야 SearchBar.vue에서 movie라는 namespace로 접근할 수 있다.
     // state 빼고 복수, state는 일종의 데이터이다. => arrow function 사용.
     state: () => ({
         title: '',
-        loading: false
+        loading: false,
+        moives: []
     }),
     getters: {},
     // 비동기처리 가능하지 않다.
@@ -24,7 +28,8 @@ export default {
                 loading: true
             })
             const res = await axios.get(`http://www.omdbapi.com/?apikey=39ea34de&s=${state.title}`)
-            commit('updateState', { //mutation을 이용해 state의 loading 부분에 true 값 할당시킨다. 
+            state.movies = res.data.Search
+            commit('updateState', {
                 loading: false
             })
         }
