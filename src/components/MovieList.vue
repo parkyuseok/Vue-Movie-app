@@ -1,16 +1,32 @@
 <template>
-<!-- https://vuetifyjs.com/ko/components/grids/, row = 행, col = 열 -->
-    <v-row>
+<!-- https://vuetifyjs.com/ko/components/grids/, row = 행, col = 열
+     https://github.com/shershen08/vue-masonry#readme, 반복되는 요소의 부모 요소에 v-masonry, item-selector=".item" 작성, 반복되는 요소에 v-masonry-tile, class="item" 작성 -->
+    <v-row
+        v-masonry
+        item-selector=".item">
         <v-col 
             v-for="movie in movies"
             :key="movie.imdbID"
+
+            v-masonry-tile
+            class="item"
+            
             cols="12"
             lg="3"
             md="3"
             sm="6">
-            <div>{{ movie.Title }}</div>
-            <div>{{ movie.Year }}</div>
-            <div>{{ movie.Poster }}</div>
+            <v-card>
+                <v-img
+                    :src="movie.Poster"
+                    :alt="movie.Title"
+                    height="300"></v-img>
+                <v-card-title>
+                    {{ movie.Title }}
+                </v-card-title>
+                <v-card-subtitle>
+                    {{ movie.Year }}
+                </v-card-subtitle>
+            </v-card>
         </v-col>
     </v-row>
 </template>
