@@ -6,8 +6,8 @@ export default {
     // state 빼고 복수, state는 일종의 데이터이다. => arrow function 사용.
     state: () => ({
         title: '',
-        loading: false,
-        movies: []
+        movies: [],
+        loading: false
     }),
     getters: {},
     // 비동기처리 가능하지 않다.
@@ -27,29 +27,36 @@ export default {
     },
     // 비동기처리 가능하다.
     actions: {
-        async searchMovies ({ state, commit }) { //commit을 사용하기 위해서 2번째 인수로 받는다.
-            // state.loading = true
+        /*  fetchMovies ({ state, commit }, pageNum) {
+                return new Promise(async resolve => {
+                    const res = await axios.get(`https://www.omdbapi.com/?apikey=${API_KEY}&s=${state.title}&page=${pageNum}`)
+                    commit('pushIntoMovies', res.data.Search)
+                    resolve(res.data)
+                })
+            }  */
+        async fetchMovies ({ state, commit }, pageNum) {
+            const res = await axios.get(`http://www.omdbapi.com/?apikey=39ea34de&s=${state.title}&page=${pageNum}`)
+            commit('pushIntoMovies', res.data.Search)
+            return res.data //resolve라는 함수에 인수로 데이터를 넣으면 밖에서 반환 받아서 사용할 수 있다.
+        },
+        async searchMovies ({ commit, dispatch }) { //commit을 사용하기 위해서 2번째 인수로 받는다.
             commit('updateState', { //mutation을 이용해 state의 loading 부분에 true 값 할당시킨다. 
-                loading: true
+                loading: true, // 로딩 애니메이션 시작
+                movies: [] //searchMovies를 두번 실행하게 되면 기존 배열에 있는 데이터 뒤에 중복적으로 데이터를 밀어넣게 되므로 "초기화 해주는 코드"를 작성해준다.
             })
-            const res = await axios.get(`http://www.omdbapi.com/?apikey=39ea34de&s=${state.title}&page=1`)
-            const pageLength = Math.ceil(res.data.totalResults / 10)
 
-            // 첫번째 페이지는 그냥 바로 할당해주어도 괜찮다.
-            commit('updateState', {
-                movies: res.data.Search
-            })
+            const { totalResults } = await dispatch('fetchMovies', 1)
+            const pageLength = Math.ceil(totalResults / 10)
 
             if (pageLength > 1) {
                 for(let i=2; i<=pageLength; i++) {
                     if (i > 4) break // 최대 40개까지만 받을 수 있게
-                    const resMore = await axios.get(`http://www.omdbapi.com/?apikey=39ea34de&s=${state.title}&page=${i}`)
-                    commit('pushIntoMovies', resMore.data.Search)
+                    await dispatch('fetchMovies', i)
                 }
             }
 
             commit('updateState', {
-                loading: false
+                loading: false // 로딩 애니메이션 종료
             })
         }
     }
