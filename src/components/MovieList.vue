@@ -1,12 +1,26 @@
 <template>
-    <div>Movie List...</div>
-    <!-- 
-        SearchBar에서 받은 데이터를 MovieList에서 사용하기 위해서는
-        첫번째로 SearchBar에서 부모 컴포넌트(App.vue)에게 $emit으로 데이터를 올리고
-        props로 MovieList에게 전달하는 방법이 있다.
-        하지만 컴포넌트 간 데이터 이동이 2 Depth 이상일 경우
-        고려할 수 있는게 2가지 있다.
-        1. EventBus를 사용한다.
-        2. store를 사용한다. (SearchBar에 있는 내용을 Store로 이관...)
-    -->
+<!-- https://vuetifyjs.com/ko/components/grids/, row = 행, col = 열 -->
+    <v-row>
+        <v-col 
+            v-for="movie in movies"
+            :key="movie.imdbID"
+            cols="12"
+            lg="3"
+            md="3"
+            sm="6">
+            <div>{{ movie.Title }}</div>
+            <div>{{ movie.Year }}</div>
+            <div>{{ movie.Poster }}</div>
+        </v-col>
+    </v-row>
 </template>
+
+<script>
+export default {
+    computed: {
+        movies () {
+            return this.$store.state.movie.movies
+        }
+    }    
+}
+</script>

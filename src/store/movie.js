@@ -7,7 +7,7 @@ export default {
     state: () => ({
         title: '',
         loading: false,
-        moives: []
+        movies: []
     }),
     getters: {},
     // 비동기처리 가능하지 않다.
@@ -28,7 +28,7 @@ export default {
                 loading: true
             })
             const res = await axios.get(`http://www.omdbapi.com/?apikey=39ea34de&s=${state.title}`)
-            
+
             commit('updateState', {
                 movies: res.data.Search,
                 loading: false
