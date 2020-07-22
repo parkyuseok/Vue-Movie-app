@@ -26,10 +26,19 @@ import { mapActions } from 'vuex'
 export default {
     // 스토어로 이관된 데이터들을 가져와서 사용하려면 computed
     computed: {
-        title () {
+        title: {
             // store에서 state 부분을 수정하려면 mutations를 이용해서 수정해야하는데
             // v-model을 이용해서 직접적으로 수정하기 때문에 에러가 발생한다.
-            return this.$store.state.movie.title
+            // 따라서 Getter와 Setter을 이용해서 작성해준다.
+            get () {
+                return this.$store.state.movie.title 
+            },
+            // mutation의 도움을 받아 title을 갱신해준다.
+            set (title) { // 수정된 title이 들어온다.
+                this.$store.commit('movie/updateState', {
+                    title //title: title
+                })
+            }
         },
         loading () {
             return this.$store.state.movie.loading
